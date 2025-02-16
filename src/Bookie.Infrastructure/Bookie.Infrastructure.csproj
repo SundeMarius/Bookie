@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Sunde.FluentMonads" Version="1.0.2" />
+  </ItemGroup>
+
 </Project>
