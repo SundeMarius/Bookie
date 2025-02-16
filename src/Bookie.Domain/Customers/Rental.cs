@@ -27,9 +27,9 @@ public class Rental : Entity
 
 public static class RentalErrors
 {
-    public static DomainError InvalidRentalPeriod(DateTimeOffset from, DateTimeOffset to)
+    public static BookieError InvalidRentalPeriod(DateTimeOffset from, DateTimeOffset to)
         => new("RentalErrors.InvalidRentalPeriod", $"The 'from' date {from} has to be before the 'to' date {to}");
 
-    public static DomainError RentalTooLong
+    public static BookieError RentalTooLong
         => new("RentalErrors.RentalTooLong", $"The rental period can be at most two months");
 }

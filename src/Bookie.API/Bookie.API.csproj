@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Books/" />
+    <ProjectReference Include="../Bookie.Application/Bookie.Application.csproj" />
   </ItemGroup>
 
 </Project>

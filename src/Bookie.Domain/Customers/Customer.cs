@@ -35,6 +35,6 @@ public sealed class Customer : Entity
 
 public static class CustomerErrors
 {
-    public static DomainError EmptyFirstName => new("Customer.EmptyFirstName", "The first name has to be set");
-    public static DomainError InvalidEmail(string email) => new("Customer.InvalidEmail", $"The email '{email}' has an invalid format");
+    public static Infrastructure.BookieError EmptyFirstName => new("Customer.EmptyFirstName", "The first name has to be set");
+    public static Infrastructure.BookieError InvalidEmail(string email) => new("Customer.InvalidEmail", $"The email '{email}' has an invalid format");
 }

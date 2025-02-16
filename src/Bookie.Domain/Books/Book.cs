@@ -30,6 +30,6 @@ public sealed class Book : Entity
 
 public static class BookErrors
 {
-    public static DomainError EmptyTitle => new("BookErrors.EmptyTitle", "The book title of has to be set");
-    public static DomainError EmptyAuthor => new("BookErrors.EmptyAuthor", "The author has to be set");
+    public static BookieError EmptyTitle => new("BookErrors.EmptyTitle", "The book title of has to be set");
+    public static BookieError EmptyAuthor => new("BookErrors.EmptyAuthor", "The author has to be set");
 }
