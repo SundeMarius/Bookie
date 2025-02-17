@@ -1,4 +1,5 @@
 using Bookie.Domain.Abstractions;
+using Bookie.Domain.Authorization;
 
 namespace Bookie.Domain.Books;
 
@@ -13,6 +14,7 @@ public record BookQuery(string? BookTitle = null,
                         int? Group = null,
                         int? Publisher = null,
                         int? Title = null,
+                        AuthorizationLevel? MinimumAuthorization = null,
                         DateOnly? From = null,
                         DateOnly? To = null);
 

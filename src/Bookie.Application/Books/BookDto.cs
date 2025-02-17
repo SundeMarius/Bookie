@@ -1,3 +1,4 @@
+using Bookie.Domain.Authorization;
 using Bookie.Domain.Books;
 
 namespace Bookie.Application.Books;
@@ -7,6 +8,7 @@ public record BookDto(
     string BookTitle,
     string Author,
     DateOnly Released,
+    AuthorizationLevel MinimumAuthorization,
     string ISBN10)
 {
     public static BookDto FromBook(Book book) => new(
@@ -14,6 +16,7 @@ public record BookDto(
         BookTitle: book.Title,
         Author: book.Author,
         Released: book.ReleaseDate,
+        MinimumAuthorization: book.MinimumAuthorization,
         ISBN10: book.ISBN10.ToString()
     );
 }
