@@ -1,4 +1,3 @@
-using Bookie.Application.Books;
 using Bookie.Application.Books.Create;
 using Bookie.Application.Books.Get;
 using MediatR;
@@ -13,9 +12,7 @@ public class BooksController(ISender mediator) : ControllerBase
     [HttpGet("{bookId}")]
     public async Task<IActionResult> Get(Guid bookId)
     {
-        var query = new GetBookByIdQuery(bookId);
-
-        return Ok(await mediator.Send(query));
+        return Ok(await mediator.Send(new GetBookByIdQuery(bookId)));
     }
 
     [HttpPost]

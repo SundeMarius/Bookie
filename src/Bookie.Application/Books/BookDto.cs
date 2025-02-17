@@ -9,7 +9,7 @@ public record BookDto(
     DateOnly Released,
     string ISBN10)
 {
-    public static BookDto FromBook(Book book) => new BookDto(
+    public static BookDto FromBook(Book book) => new(
         Id: book.Id,
         BookTitle: book.Title,
         Author: book.Author,

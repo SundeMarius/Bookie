@@ -1,4 +1,4 @@
-using Bookie.Infrastructure;
+using Bookie.Domain.Abstractions;
 using FluentMonads;
 
 namespace Bookie.Domain.Customers;
@@ -27,9 +27,9 @@ public class Rental : Entity
 
 public static class RentalErrors
 {
-    public static BookieError InvalidRentalPeriod(DateTimeOffset from, DateTimeOffset to)
+    public static DomainError InvalidRentalPeriod(DateTimeOffset from, DateTimeOffset to)
         => new("RentalErrors.InvalidRentalPeriod", $"The 'from' date {from} has to be before the 'to' date {to}");
 
-    public static BookieError RentalTooLong
+    public static DomainError RentalTooLong
         => new("RentalErrors.RentalTooLong", $"The rental period can be at most two months");
 }

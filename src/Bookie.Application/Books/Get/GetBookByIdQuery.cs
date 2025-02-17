@@ -1,5 +1,5 @@
 using Bookie.Application.Abstractions;
-using Bookie.Domain.Repositories;
+using Bookie.Domain.Books;
 
 namespace Bookie.Application.Books.Get;
 
@@ -10,7 +10,7 @@ public class GetBookByIdQueryHandler(IBookRepository bookRepository) : IQueryHan
         var book = await bookRepository.GetAsync(query.Id);
         if (book is null)
             return null;
-        return BookDto.FromBook(book.Book);
+        return BookDto.FromBook(book);
     }
 }
 

@@ -1,0 +1,23 @@
+using Bookie.Domain.Abstractions;
+
+namespace Bookie.Domain.Books;
+
+public interface IBookRepository : IRepository<Book>
+{
+    Task<IEnumerable<BookRecord>> FindAsync(BookQuery bookQuery);
+    Task<BookRecord?> UpdateBookCountAsync(Guid bookId, uint newCount);
+    Task<BookRecord?> GetBookCountAsync(Guid bookId);
+}
+
+public record BookQuery(string? BookTitle = null,
+                        int? Group = null,
+                        int? Publisher = null,
+                        int? Title = null,
+                        DateOnly? From = null,
+                        DateOnly? To = null);
+
+public class BookRecord(Book book, uint inventoryCount)
+{
+    public Book Book { get; set; } = book;
+    public uint InventoryCount { get; set; } = inventoryCount;
+}

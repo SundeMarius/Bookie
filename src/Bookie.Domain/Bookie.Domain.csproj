@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Bookie.Infrastructure/Bookie.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EmailValidation" Version="1.2.0" />
+    <PackageReference Include="Sunde.FluentMonads" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

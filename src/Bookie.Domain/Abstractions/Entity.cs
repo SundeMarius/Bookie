@@ -1,4 +1,4 @@
-namespace Bookie.Infrastructure;
+namespace Bookie.Domain.Abstractions;
 
 public abstract class Entity(Guid id)
 {

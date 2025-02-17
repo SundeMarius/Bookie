@@ -1,7 +1,7 @@
+using Bookie.Domain.Abstractions;
 using FluentMonads;
 
 namespace Bookie.Domain.Books;
-
 
 public sealed class ISBN10
 {
@@ -55,6 +55,6 @@ public sealed class ISBN10
 
 public static class ISBN10Errors
 {
-    public static Infrastructure.BookieError InvalidGroupNumber(int group) => new("ISBN10.InvalidGroup", $"The group number {group} is not valid");
-    public static Infrastructure.BookieError NotValidCombination => new("ISBN10.Invalid", $"The current number combination has to contain nine digits");
+    public static DomainError InvalidGroupNumber(int group) => new("ISBN10.InvalidGroup", $"The group number {group} is not valid");
+    public static DomainError NotValidCombination => new("ISBN10.Invalid", $"The current number combination has to contain nine digits");
 }

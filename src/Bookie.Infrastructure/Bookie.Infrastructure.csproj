@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sunde.FluentMonads" Version="1.0.2" />
+    <Folder Include="Database/" />
+    <Folder Include="Http/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Bookie.Domain/Bookie.Domain.csproj" />
   </ItemGroup>
 
 </Project>
