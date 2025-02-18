@@ -11,7 +11,7 @@ public record BookDto(
     AuthorizationLevel MinimumAuthorization,
     string ISBN10)
 {
-    public static BookDto FromBook(Book book) => new(
+    public static BookDto ToBookDto(Book book) => new(
         Id: book.Id,
         BookTitle: book.Title,
         Author: book.Author,

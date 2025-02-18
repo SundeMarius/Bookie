@@ -7,7 +7,7 @@ namespace Bookie.Domain.Library;
 
 public class LibraryService(IBookRepository bookRepository, ICustomerRepository customerRepository)
 {
-    public Result RentBook(Customer customer, BookRecord bookRecord, DateTimeOffset from, DateTimeOffset to)
+    public async Task<Result> RentBook(Customer customer, BookRecord bookRecord, DateTimeOffset from, DateTimeOffset to)
     {
         if (bookRecord.InventoryCount == 0)
             return Result.Failure(LibraryErrors.BookNotAvailable(bookRecord.Book.ISBN10));
@@ -15,25 +15,27 @@ public class LibraryService(IBookRepository bookRepository, ICustomerRepository 
         if (customer.Authorization < bookRecord.Book.MinimumAuthorization)
             return Result.Failure(LibraryErrors.NotAuthorized(customer, bookRecord.Book));
 
-        return (Result)Rental
-                .Create(bookRecord.Book.Id, from, to)
-                .OnSuccess(async rental =>
-                {
-                    await bookRepository.UpdateBookCountAsync(rental.BookId, bookRecord.InventoryCount - 1);
-                    customer.AddRental(rental);
-                    await customerRepository.UpdateAsync(customer);
-                })
-                .AndThen(_ => Result.Success());
+        var result = Rental
+                        .Create(bookRecord.Book.Id, from, to)
+                        .OnSuccess(async rental =>
+                        {
+                            customer.AddRental(rental);
+                            await customerRepository.UpdateAsync(customer);
+                            await bookRepository.DecrementBookCountAsync(rental.BookId);
+                        });
+
+        return result.IsSuccess ? Result.Success() : Result.Failure(result.Error);
     }
 
-    public async Task<Result> EndBookRental(Customer customer, Book book)
+    public async Task<Result> ReturnBook(Customer customer, Rental rental)
     {
-        if (!customer.Rentals.Any(r => r.Id == book.Id))
-            return Result.Failure(LibraryErrors.BookNotRented(customer.Id, book.ISBN10));
+        if (!customer.Rentals.Any(r => r == rental))
+            return Result.Failure(LibraryErrors.BookNotRented(customer.Id, rental.BookId));
 
-        customer.RemoveRental(book.Id);
-
+        customer.RemoveRental(rental);
         await customerRepository.UpdateAsync(customer);
+        await bookRepository.IncrementBookCountAsync(rental.BookId);
+
         return Result.Success();
     }
 
@@ -49,19 +51,19 @@ public class LibraryService(IBookRepository bookRepository, ICustomerRepository 
         return await bookRepository.CreateAsync(book);
     }
 
-    public async Task<Result<Book>> DeleteBook(Guid id)
+    public async Task<Result> DeleteBook(Guid id)
     {
         var deletedBook = await bookRepository.DeleteAsync(id);
         if (deletedBook is null)
-            return LibraryErrors.BookNotFound(id);
-        return deletedBook;
+            return Result.Failure(LibraryErrors.BookNotFound(id));
+        return Result.Success();
     }
 }
 
 public static class LibraryErrors
 {
-    public static DomainError BookNotRented(Guid customerId, ISBN10 iSBN10)
-        => new("LibraryError.BookNotRented", $"No rental of isbn '{iSBN10}' registered on customer with id '{customerId}'");
+    public static DomainError BookNotRented(Guid customerId, Guid bookId)
+        => new("LibraryError.BookNotRented", $"No rental of book with id '{bookId}' registered on customer with id '{customerId}'");
     public static DomainError BookNotAvailable(ISBN10 iSBN10)
         => new("LibraryError.BookNotAvailable", $"The book with isbn '{iSBN10}' is not available");
     public static DomainError BookAlreadyAdded(ISBN10 iSBN10)

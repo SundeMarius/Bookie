@@ -8,10 +8,23 @@ public class BookRepository : IBookRepository
 
     public async Task<IEnumerable<BookRecord>> FindAsync(BookQuery bookQuery)
     {
-        return await Task.FromResult(_books.Values.Where(br =>
-            br.Book.ISBN10.Group == bookQuery.Group
-            && br.Book.ISBN10.Publisher == bookQuery.Publisher
-            && br.Book.ISBN10.Title == bookQuery.Title));
+        var it = _books.Values.AsEnumerable();
+        if (bookQuery.BookTitle is not null)
+            it = it.Where(br => br.Book.Title == bookQuery.BookTitle);
+        if (bookQuery.MinimumAuthorization is not null)
+            it = it.Where(br => br.Book.MinimumAuthorization >= bookQuery.MinimumAuthorization);
+        if (bookQuery.Group is not null)
+            it = it.Where(br => br.Book.ISBN10.Group == bookQuery.Group);
+        if (bookQuery.Publisher is not null)
+            it = it.Where(br => br.Book.ISBN10.Publisher == bookQuery.Publisher);
+        if (bookQuery.Title is not null)
+            it = it.Where(br => br.Book.ISBN10.Title == bookQuery.Title);
+        if (bookQuery.From is not null)
+            it = it.Where(br => br.Book.ReleaseDate >= bookQuery.From);
+        if (bookQuery.To is not null)
+            it = it.Where(br => br.Book.ReleaseDate <= bookQuery.To);
+
+        return await Task.FromResult(it);
     }
 
     public async Task<Book> CreateAsync(Book book)
@@ -54,5 +67,21 @@ public class BookRepository : IBookRepository
             return null;
         _books.Remove(bookId);
         return await Task.FromResult(bookRecord.Book);
+    }
+
+    public async Task<BookRecord?> DecrementBookCountAsync(Guid bookId)
+    {
+        if (!_books.TryGetValue(bookId, out var bookRecord))
+            return null;
+        bookRecord.InventoryCount--;
+        return await Task.FromResult(bookRecord);
+    }
+
+    public async Task<BookRecord?> IncrementBookCountAsync(Guid bookId)
+    {
+        if (!_books.TryGetValue(bookId, out var bookRecord))
+            return null;
+        bookRecord.InventoryCount++;
+        return await Task.FromResult(bookRecord);
     }
 }

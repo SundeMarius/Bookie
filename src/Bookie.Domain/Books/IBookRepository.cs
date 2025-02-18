@@ -6,6 +6,8 @@ namespace Bookie.Domain.Books;
 public interface IBookRepository : IRepository<Book>
 {
     Task<IEnumerable<BookRecord>> FindAsync(BookQuery bookQuery);
+    Task<BookRecord?> DecrementBookCountAsync(Guid bookId);
+    Task<BookRecord?> IncrementBookCountAsync(Guid bookId);
     Task<BookRecord?> UpdateBookCountAsync(Guid bookId, uint newCount);
     Task<BookRecord?> GetBookCountAsync(Guid bookId);
 }

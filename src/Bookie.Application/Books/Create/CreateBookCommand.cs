@@ -10,12 +10,11 @@ public class CreateBookCommandHandler(LibraryService library) : ICommandHandler<
 {
     public async Task<Result<BookDto>> Handle(CreateBookCommand command, CancellationToken cancellationToken = default)
     {
-        var book = await ISBN10
+        return (await ISBN10
             .Create(command.Group, command.Publisher, command.Title)
             .AndThen(isbn10 => Book.Create(command.BookTitle, command.Author, command.ReleaseDate, isbn10, command.MinimumAuthorization))
-            .AndThenAsync(library.AddBook);
-
-        return book.Map(BookDto.FromBook);
+            .AndThenAsync(library.AddBook))
+            .Map(BookDto.ToBookDto);
     }
 }
 

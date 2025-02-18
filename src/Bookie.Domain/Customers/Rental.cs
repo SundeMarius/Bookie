@@ -9,7 +9,7 @@ public class Rental : Entity
     {
         if (from >= to)
             return RentalErrors.InvalidRentalPeriod(from, to);
-        if (from.AddMonths(2) <= to)
+        if (from.AddMonths(2) < to)
             return RentalErrors.RentalTooLong;
         return new Rental(bookId, from, to);
     }

@@ -17,7 +17,7 @@ public sealed class Customer : Entity
     }
 
     public void AddRental(Rental rental) => _rentals.Add(rental);
-    public void RemoveRental(Guid bookId) => _rentals.RemoveAll(b => b.BookId == bookId);
+    public void RemoveRental(Rental rental) => _rentals.Remove(rental);
 
     public string FirstName { get; private set; }
     public string? LastName { get; private set; }

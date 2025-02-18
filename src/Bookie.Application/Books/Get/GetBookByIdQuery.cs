@@ -10,7 +10,7 @@ public class GetBookByIdQueryHandler(IBookRepository bookRepository) : IQueryHan
         var book = await bookRepository.GetAsync(query.Id);
         if (book is null)
             return null;
-        return BookDto.FromBook(book);
+        return BookDto.ToBookDto(book);
     }
 }
 
