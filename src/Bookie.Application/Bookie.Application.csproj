@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Customers/Create/" />
-    <Folder Include="Customers/Delete/" />
-    <Folder Include="Customers/Get/" />
     <Folder Include="Customers/Update/" />
     <Folder Include="Library/" />
   </ItemGroup>

@@ -10,7 +10,7 @@ public sealed class ISBN10
         if (group >= 10_000)
             return ISBN10Errors.InvalidGroupNumber(group);
 
-        if ((group.ToString() + publisher.ToString() + title.ToString()).Length != 9)
+        if ($"{group}{publisher}{title}".Length != 9)
             return ISBN10Errors.NotValidCombination;
 
         return Result<ISBN10>.Success(new ISBN10(group, publisher, title));
@@ -56,5 +56,5 @@ public sealed class ISBN10
 public static class ISBN10Errors
 {
     public static DomainError InvalidGroupNumber(int group) => new("ISBN10.InvalidGroup", $"The group number {group} is not valid");
-    public static DomainError NotValidCombination => new("ISBN10.Invalid", $"The current number combination has to contain nine digits");
+    public static DomainError NotValidCombination => new("ISBN10.Invalid", $"The 'group, publisher, title' combination has to combine to nine digits");
 }

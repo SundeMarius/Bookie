@@ -11,13 +11,14 @@ public sealed class Book : Entity
         string author,
         DateOnly release,
         ISBN10 iSBN10,
-        AuthorizationLevel minimumAuthoization = AuthorizationLevel.None
-    )
+        AuthorizationLevel minimumAuthoization = AuthorizationLevel.None)
     {
         if (string.IsNullOrEmpty(title))
             return BookErrors.EmptyTitle;
+
         if (string.IsNullOrEmpty(author))
             return BookErrors.EmptyAuthor;
+
         return new Book(title, author, release, iSBN10, minimumAuthoization);
     }
 
