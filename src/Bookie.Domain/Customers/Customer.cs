@@ -44,7 +44,7 @@ public sealed class Customer : Entity
 
 public static class CustomerErrors
 {
-    public static DomainError MissingFirstName => new("CustomerError.EmptyFirstName", "The first name has to be set");
+    public static DomainError MissingFirstName => new("CustomerError.MissingFirstName", "The first name has to be set");
     public static DomainError MissingLastName => new("CustomerError.MissingLastName", "The last name has to be set");
     public static DomainError InvalidEmail(string email) => new("CustomerError.InvalidEmail", $"The email '{email}' has an invalid format");
 }

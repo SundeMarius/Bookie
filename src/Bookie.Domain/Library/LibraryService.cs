@@ -7,21 +7,21 @@ namespace Bookie.Domain.Library;
 
 public class LibraryService(IBookRepository bookRepository, ICustomerRepository customerRepository)
 {
-    public async Task<Result> RentBook(Customer customer, BookRecord bookRecord, DateTimeOffset from, DateTimeOffset to)
+    public async Task<Result<Rental>> RentBook(Customer customer, BookRecord bookRecord, DateTimeOffset from, DateTimeOffset to)
     {
         if (bookRecord.InventoryCount == 0)
-            return Result.Failure(LibraryErrors.BookNotAvailable(bookRecord.Book.ISBN10));
+            return LibraryErrors.BookNotAvailable(bookRecord.Book.ISBN10);
 
         if (customer.Authorization < bookRecord.Book.MinimumAuthorization)
-            return Result.Failure(LibraryErrors.NotAuthorized(customer, bookRecord.Book));
+            return LibraryErrors.NotAuthorized(customer, bookRecord.Book);
 
         return await Rental
                     .Create(bookRecord.Book.Id, from, to)
                     .AndThenAsync<Rental, Rental>(async rental =>
                     {
+                        await bookRepository.DecrementBookCountAsync(rental.BookId);
                         customer.AddRental(rental);
                         await customerRepository.UpdateAsync(customer);
-                        await bookRepository.DecrementBookCountAsync(rental.BookId);
                         return rental;
                     });
     }
@@ -32,8 +32,8 @@ public class LibraryService(IBookRepository bookRepository, ICustomerRepository 
             return Result.Failure(LibraryErrors.BookNotRented(customer.Id, rental.BookId));
 
         customer.RemoveRental(rental);
-        await customerRepository.UpdateAsync(customer);
         await bookRepository.IncrementBookCountAsync(rental.BookId);
+        await customerRepository.UpdateAsync(customer);
 
         return Result.Success();
     }
@@ -70,7 +70,7 @@ public class LibraryService(IBookRepository bookRepository, ICustomerRepository 
         return await customerRepository.CreateAsync(customer);
     }
 
-    public async Task<Result> RemoveCustomer(Guid id)
+    public async Task<Result> UnregisterCustomer(Guid id)
     {
         var deletedCustomer = await customerRepository.DeleteAsync(id);
         if (deletedCustomer is null)

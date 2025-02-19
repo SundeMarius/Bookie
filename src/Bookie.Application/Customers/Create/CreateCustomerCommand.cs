@@ -22,5 +22,4 @@ public record CreateCustomerCommand(
     string FirstName,
     string LastName,
     string? Email,
-    AuthorizationLevel Authorization
-) : ICommand<CustomerDto>;
+    AuthorizationLevel Authorization) : ICommand<CustomerDto>;

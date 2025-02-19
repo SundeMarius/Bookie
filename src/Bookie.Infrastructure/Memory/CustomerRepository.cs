@@ -28,4 +28,15 @@ public class CustomerRepository : ICustomerRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<Rental?> GetRental(Guid RentalId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Rental>> GetRentals(Guid CustomerId)
+    {
+        throw new NotImplementedException();
+    }
+
 }

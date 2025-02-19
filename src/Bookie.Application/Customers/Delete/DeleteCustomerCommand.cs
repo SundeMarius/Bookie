@@ -8,7 +8,7 @@ public class DeleteBookCommandHandler(LibraryService library) : ICommandHandler<
 {
     public async Task<Result> Handle(DeleteCustomerCommand command, CancellationToken cancellationToken = default)
     {
-        return await library.RemoveCustomer(command.CustomerId);
+        return await library.UnregisterCustomer(command.CustomerId);
     }
 }
 
