@@ -1,6 +1,7 @@
-using Bookie.Application.Customers;
-using Bookie.Application.Library.Rental.Create;
-using Bookie.Application.Library.Rental.Get;
+using Bookie.Application.Abstractions;
+using Bookie.Application.Books.Get;
+using Bookie.Application.Library;
+using Bookie.Application.Library.Inventory;
 using FluentMonads;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +12,29 @@ namespace Bookie.API.Library;
 [ApiController]
 public class LibraryController(ISender mediator) : ControllerBase
 {
-    [HttpGet("rental/{id}")]
-    public async Task<IActionResult> GetRental(Guid id)
+    [HttpGet("{bookId}")]
+    public async Task<ActionResult<BookRecordDto>> Get(Guid bookId)
     {
-        return Ok(await mediator.Send(new GetRentalByIdQuery(id)));
+        var bookRecord = await mediator.Send(new GetBookByIdQuery(bookId));
+        return Ok(bookRecord);
     }
 
-    [HttpPost("rental")]
-    public async Task<IActionResult> AddRental(CreateRentalCommand request)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<BookRecordDto>>> Find([FromQuery] FindBookQuery query)
     {
-        var rental = await mediator.Send(request);
-        return rental.Match<RentalDto, ObjectResult>(
+        var bookRecords = await mediator.Send(query);
+        return Ok(bookRecords);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BookRecordDto>> UpdateInventory([FromBody] UpdateInventoryRequest request)
+    {
+        var result = await mediator.Send(new UpdateInventoryCommand(request.BookId, request.NewCount));
+
+        if (result.IsFailureAnd(e => e is ValidationError))
+            return BadRequest(result.Error);
+
+        return result.Match<BookRecordDto, ObjectResult>(
             onSuccess: Ok,
             onFailure: NotFound
         );

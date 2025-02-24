@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Customers/Update/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="../Bookie.Domain/Bookie.Domain.csproj" />
     <ProjectReference Include="../Bookie.Infrastructure/Bookie.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.2" />
   </ItemGroup>

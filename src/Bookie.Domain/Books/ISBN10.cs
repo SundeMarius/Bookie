@@ -3,17 +3,17 @@ using FluentMonads;
 
 namespace Bookie.Domain.Books;
 
-public sealed class ISBN10
+public sealed record ISBN10
 {
     public static Result<ISBN10> Create(int group, int publisher, int title)
     {
         if (group >= 10_000)
-            return ISBN10Errors.InvalidGroupNumber(group);
+            return ISBN10Error.InvalidGroupNumber(group);
 
         if ($"{group}{publisher}{title}".Length != 9)
-            return ISBN10Errors.NotValidCombination;
+            return ISBN10Error.NotValidCombination;
 
-        return Result<ISBN10>.Success(new ISBN10(group, publisher, title));
+        return new ISBN10(group, publisher, title);
     }
 
     public override string ToString()
@@ -53,8 +53,8 @@ public sealed class ISBN10
     }
 }
 
-public static class ISBN10Errors
+public static class ISBN10Error
 {
     public static DomainError InvalidGroupNumber(int group) => new("ISBN10.InvalidGroup", $"The group number {group} is not valid");
-    public static DomainError NotValidCombination => new("ISBN10.Invalid", $"The 'group, publisher, title' combination has to combine to nine digits");
+    public static DomainError NotValidCombination => new("ISBN10.InvalidCombination", $"There has to be exactly nine digits from the 'group, publisher, title' combination");
 }

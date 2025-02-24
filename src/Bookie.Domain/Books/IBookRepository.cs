@@ -5,20 +5,13 @@ namespace Bookie.Domain.Books;
 
 public interface IBookRepository : IRepository<Book>
 {
-    Task<IEnumerable<BookRecord>> FindAsync(BookQuery bookQuery);
+    Task<IEnumerable<BookRecord>> FindAsync(string? bookTitle = null, string? author = null, int? group = null, int? publisher = null,
+                                            int? title = null, AuthorizationLevel? minimumAuthorization = null, DateOnly? releasedFrom = null, DateOnly? releasedto = null);
     Task<BookRecord?> DecrementBookCountAsync(Guid bookId);
     Task<BookRecord?> IncrementBookCountAsync(Guid bookId);
-    Task<BookRecord?> UpdateBookCountAsync(Guid bookId, uint newCount);
-    Task<BookRecord?> GetBookCountAsync(Guid bookId);
+    Task<BookRecord?> UpdateBookCountAsync(Guid bookId, int newCount);
+    Task<BookRecord?> GetBookRecordAsync(Guid bookId);
 }
-
-public record BookQuery(string? BookTitle = null,
-                        int? Group = null,
-                        int? Publisher = null,
-                        int? Title = null,
-                        AuthorizationLevel? MinimumAuthorization = null,
-                        DateOnly? From = null,
-                        DateOnly? To = null);
 
 public class BookRecord(Book book, uint inventoryCount)
 {

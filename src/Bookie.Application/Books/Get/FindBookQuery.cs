@@ -1,4 +1,5 @@
 using Bookie.Application.Abstractions;
+using Bookie.Application.Library;
 using Bookie.Domain.Authorization;
 using Bookie.Domain.Books;
 
@@ -8,20 +9,22 @@ public class FindBookQueryHandler(IBookRepository bookRepository) : IQueryHandle
 {
     public async Task<IEnumerable<BookRecordDto>> Handle(FindBookQuery request, CancellationToken cancellationToken)
     {
-        return (await bookRepository.FindAsync(new(
+        return (await bookRepository.FindAsync(
             request.BookTitle,
+            request.Author,
             request.Group,
             request.Publisher,
             request.Title,
             request.MinimumAuthorization,
             request.From,
             request.To
-        ))).Select(BookRecordDto.ToBookRecordDto);
+        )).Select(br => BookRecordDto.ToBookRecordDto(br));
     }
 }
 
 public record FindBookQuery(
     string? BookTitle = null,
+    string? Author = null,
     int? Group = null,
     int? Publisher = null,
     int? Title = null,

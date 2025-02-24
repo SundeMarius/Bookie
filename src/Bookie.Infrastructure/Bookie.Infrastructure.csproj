@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Database/" />
-    <Folder Include="Http/" />
+    <Folder Include="Repositories/Database/" />
+    <Folder Include="Repositories/Http/" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,7 @@
+using Bookie.Application.Books;
 using Bookie.Domain.Books;
 
-namespace Bookie.Application.Books;
+namespace Bookie.Application.Library;
 
 public record BookRecordDto(BookDto Book, uint InventoryCount)
 {

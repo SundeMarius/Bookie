@@ -1,8 +1,10 @@
 namespace Bookie.Domain.Abstractions;
 
-public abstract class Entity(Guid id)
+public abstract class Entity
 {
-    public Guid Id { get; init; } = id;
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public DateTimeOffset Created { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset LastUpdated { get; set; } = DateTimeOffset.UtcNow;
 
     public override bool Equals(object? obj)
     {

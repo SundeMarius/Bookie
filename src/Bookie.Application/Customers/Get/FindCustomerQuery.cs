@@ -8,12 +8,16 @@ public class FindCustomerQueryHandler(ICustomerRepository customerRepository) : 
 {
     public async Task<IEnumerable<CustomerDto>> Handle(FindCustomerQuery request, CancellationToken cancellationToken)
     {
-        return (await customerRepository.FindAsync(new(
-            request.FirstName,
-            request.LastName,
-            request.Email,
-            request.Authorization
-            ))).Select(CustomerDto.ToCustomerDto);
+        var customers = await customerRepository.FindAsync(
+            new(
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.Authorization
+                )
+            );
+
+        return customers.Select(CustomerDto.ToCustomerDto);
     }
 }
 

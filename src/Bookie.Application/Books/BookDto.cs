@@ -7,7 +7,7 @@ public record BookDto(
     Guid Id,
     string BookTitle,
     string Author,
-    DateOnly Released,
+    DateOnly Published,
     AuthorizationLevel MinimumAuthorization,
     string ISBN10)
 {
@@ -15,7 +15,7 @@ public record BookDto(
         Id: book.Id,
         BookTitle: book.Title,
         Author: book.Author,
-        Released: book.ReleaseDate,
+        Published: book.Published,
         MinimumAuthorization: book.MinimumAuthorization,
         ISBN10: book.ISBN10.ToString()
     );

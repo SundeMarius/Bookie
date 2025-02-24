@@ -1,9 +1,9 @@
 using Bookie.Application;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddMediatR(c => c.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()))
     .AddOpenApi()
     .AddControllers();
 
@@ -13,6 +13,7 @@ CompositionRoot.Compose(builder.Services);
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
+    app.MapScalarApiReference();
     app.MapOpenApi();
 }
 
